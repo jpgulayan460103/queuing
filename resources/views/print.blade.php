@@ -16,11 +16,11 @@
             @page {
                 margin: 0px;
                 padding: 0px;
-                padding-bottom: 70px;
             }
-            body { margin: 0px;  padding-bottom: 70px;}
-            h1, h2, h3, h4{
-                line-height: 0.1;
+            body { margin: 0px;}
+            h1, h2, h3, h4, h5{
+                line-height: 0.6;
+                font-size: 250%
             }
             hr { 
                 display: block;
@@ -29,18 +29,27 @@
                 border-style: dashed;
                 border-width: 1px;
             }
+            #priority_number, #rigen{
+                font-size: 400%;
+            }
+            #marketing{
+                font-size:200%
+            }
         </style>
     </head>
     <body>
         <div style="width: 100mm;">
             <center>
-                <img src="img/logo.png" style="width: inherit; margin-bottom: 10px">
-                <h1 style="text-align: center">MATI</h1>
+                <br>
+                <h1 style="text-align: center" id="rigen">RIGEN</h1>
+                <h4 style="text-align: center" id="marketing">MARKETING</h4><br>
+                <h1 style="text-align: center">- MATI -</h1>
                 <hr>
-                <h2 style="text-align: center">{{ sprintf('%03d',$priority_number->priority_number) }}</h2>
+                <h2 style="text-align: center" id="priority_number">{{ sprintf('%03d',$priority_number->priority_number) }}</h2>
                 <hr>
-                <h4 style="text-align: center">{{ strtoupper($priority_number->type) }}</h4>
-                <p style="text-align: center;font-size:14pt">{{ strtoupper($priority_number->created_at->toDayDateTimeString()) }}</p>
+                <h4 style="text-align: center;padding-bottom:5px;">{{ strtoupper($priority_number->type) }}</h4>
+                <h5 style="text-align: center;padding-bottom:5px;">{{ strtoupper($priority_number->created_at->format('F d, Y')) }}</h5>
+                <h5 style="text-align: center;">{{ strtoupper($priority_number->created_at->format('h:i:s A')) }}</h5>
             </center>
         </div>
         <script>
