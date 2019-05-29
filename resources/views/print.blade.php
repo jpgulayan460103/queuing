@@ -29,8 +29,11 @@
                 border-style: dashed;
                 border-width: 1px;
             }
-            #priority_number, #rigen{
+            #rigen{
                 font-size: 400%;
+            }
+            #priority_number{
+                font-size: 500%;
             }
             #marketing{
                 font-size:200%
@@ -47,7 +50,15 @@
                 <hr>
                 <h2 style="text-align: center" id="priority_number">{{ sprintf('%03d',$priority_number->priority_number) }}</h2>
                 <hr>
+                @if($category != "")
+                <h4 style="text-align: center;padding-bottom:5px;">{{ strtoupper($category) }}</h4>
+                @endif
+                @if($priority_number->category == "customer_service")
+                <h4 style="text-align: center;padding-bottom:5px;">CUSTOMER</h4>
+                <h4 style="text-align: center;padding-bottom:5px;">SERVICE</h4>
+                @else
                 <h4 style="text-align: center;padding-bottom:5px;">{{ strtoupper($priority_number->type) }}</h4>
+                @endif
                 <h5 style="text-align: center;padding-bottom:5px;">{{ strtoupper($priority_number->created_at->format('F d, Y')) }}</h5>
                 <h5 style="text-align: center;">{{ strtoupper($priority_number->created_at->format('h:i:s A')) }}</h5>
             </center>

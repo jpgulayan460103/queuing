@@ -16,7 +16,7 @@ class PageController extends Controller
             case 'vip':
             case 'senior_pwd':
             case 'customer_service':
-                $type = $request->type;
+                $category = $request->category;
                 break;
             
             default:
@@ -26,10 +26,10 @@ class PageController extends Controller
         switch ($request->type) {
             case 'pay in':
             case 'payout':
-                $category = $request->category;
+                $type = $request->type;
                 break;
             default:
-                $category = "pay in";
+                $type = "pay in";
                 break;
         }
         $last_number = PriorityNumber::where('category', $category)->where('type',$type)->orderBy('id','desc')->first();
@@ -43,6 +43,26 @@ class PageController extends Controller
         $priority_number->save();
 
         $data['priority_number'] = $priority_number;
+        switch ($priority_number->category) {
+            case 'regular':
+                $category = "";
+                break;
+            case 'vip':
+                $category = "VIP";
+                break;
+            case 'senior_pwd':
+                $category = "SENIOR/PWD";
+                break;
+            case 'customer_service':
+                $category = "";
+                break;
+            
+            default:
+                $category = "";
+                break;
+        }
+        $data['category'] = $category;
+        // return $data;
         return view('print',$data);
 
         $pdf = PDF::setOptions(['dpi' => 600, 'defaultFont' => 'Helvetica']);
