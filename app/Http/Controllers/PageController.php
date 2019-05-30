@@ -104,4 +104,66 @@ class PageController extends Controller
         ];
         return $data;
     }
+
+    public function saveCurrentNumbers(Request $request)
+    {
+        $validatedData = $request->validate([
+            'regular.pay_in' => 'numeric',
+            'regular.payout' => 'numeric',
+            'vip.pay_in' => 'numeric',
+            'vip.payout' => 'numeric',
+            'senior_pwd.pay_in' => 'numeric',
+            'senior_pwd.payout' => 'numeric',
+            'customer_service' => 'numeric',
+        ]);
+
+        PriorityNumber::create([
+            'priority_number' => $request->regular['pay_in'],
+            'type' => 'pay in',
+            'category' => 'regular',
+        ]);
+
+        PriorityNumber::create([
+            'priority_number' => $request->regular['payout'],
+            'type' => 'payout',
+            'category' => 'regular',
+        ]);
+
+        PriorityNumber::create([
+            'priority_number' => $request->vip['pay_in'],
+            'type' => 'pay in',
+            'category' => 'vip',
+        ]);
+
+        PriorityNumber::create([
+            'priority_number' => $request->vip['payout'],
+            'type' => 'payout',
+            'category' => 'vip',
+        ]);
+
+        PriorityNumber::create([
+            'priority_number' => $request->senior_pwd['pay_in'],
+            'type' => 'pay in',
+            'category' => 'senior_pwd',
+        ]);
+
+        PriorityNumber::create([
+            'priority_number' => $request->senior_pwd['payout'],
+            'type' => 'payout',
+            'category' => 'senior_pwd',
+        ]);
+
+        PriorityNumber::create([
+            'priority_number' => $request->senior_pwd['payout'],
+            'type' => 'payout',
+            'category' => 'senior_pwd',
+        ]);
+
+        PriorityNumber::create([
+            'priority_number' => $request->customer_service,
+            'type' => 'pay in',
+            'category' => 'customer_service',
+        ]);
+        
+    }
 }

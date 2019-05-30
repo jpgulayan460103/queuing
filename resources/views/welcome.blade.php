@@ -87,13 +87,15 @@
                     <div class="col-6 number-button">
                         <button type="button" class="btn btn-block btn-primary" ng-click="printPriorityNumber('regular','pay in')">
                             <h1 ng-if="!showNumbers">PAY IN</h1>
-                            <h1 ng-if="showNumbers" ng-cloak>@{{ priorityNumbers.regular.pay_in }}</h1>
+                            <h1 ng-if="showNumbers && !editNumbers" ng-cloak>@{{ priorityNumbers.regular.pay_in }}</h1>
+                            <input type="text" ng-if="showNumbers && editNumbers" ng-model="priorityNumbers.regular.pay_in" ng-cloak>
                         </button>
                     </div>
                     <div class="col-6 number-button">
                         <button type="button" class="btn btn-block btn-primary" ng-click="printPriorityNumber('regular','payout')">
                             <h1 ng-if="!showNumbers">PAYOUT</h1>
-                            <h1 ng-if="showNumbers" ng-cloak>@{{ priorityNumbers.regular.payout }}</h1>
+                            <h1 ng-if="showNumbers && !editNumbers" ng-cloak>@{{ priorityNumbers.regular.payout }}</h1>
+                            <input type="text" ng-if="showNumbers && editNumbers" ng-model="priorityNumbers.regular.payout" ng-cloak>
                         </button>
                     </div>
                 </div>
@@ -101,13 +103,15 @@
                     <div class="col-6 number-button vip">
                         <button type="button" class="btn btn-block btn-primary" ng-click="printPriorityNumber('vip','pay in')">
                             <h1 ng-if="!showNumbers">VIP<br>PAY IN</h1>
-                            <h1 ng-if="showNumbers" ng-cloak>@{{ priorityNumbers.vip.pay_in }}</h1>
+                            <h1 ng-if="showNumbers && !editNumbers" ng-cloak>@{{ priorityNumbers.vip.pay_in }}</h1>
+                            <input type="text" ng-if="showNumbers && editNumbers" ng-model="priorityNumbers.vip.pay_in" ng-cloak>
                         </button>
                     </div>
                     <div class="col-6 number-button vip">
                         <button type="button" class="btn btn-block btn-primary" ng-click="printPriorityNumber('vip','payout')">
                             <h1 ng-if="!showNumbers">VIP<br>PAYOUT</h1>
-                            <h1 ng-if="showNumbers" ng-cloak>@{{ priorityNumbers.vip.payout }}</h1>
+                            <h1 ng-if="showNumbers && !editNumbers" ng-cloak>@{{ priorityNumbers.vip.payout }}</h1>
+                            <input type="text" ng-if="showNumbers && editNumbers" ng-model="priorityNumbers.vip.payout" ng-cloak>
                         </button>
                     </div>
                 </div>
@@ -115,13 +119,15 @@
                     <div class="col-6 number-button">
                         <button type="button" class="btn btn-block btn-primary" ng-click="printPriorityNumber('senior_pwd','pay in')">
                             <h1 ng-if="!showNumbers">SENIOR/PWD<br>PAY IN</h1>
-                            <h1 ng-if="showNumbers" ng-cloak>@{{ priorityNumbers.senior_pwd.pay_in }}</h1>
+                            <h1 ng-if="showNumbers && !editNumbers" ng-cloak>@{{ priorityNumbers.senior_pwd.pay_in }}</h1>
+                            <input type="text" ng-if="showNumbers && editNumbers" ng-model="priorityNumbers.senior_pwd.pay_in" ng-cloak>
                         </button>
                     </div>
                     <div class="col-6 number-button">
                         <button type="button" class="btn btn-block btn-primary" ng-click="printPriorityNumber('senior_pwd','payout')">
                             <h1 ng-if="!showNumbers">SENIOR/PWD<br>PAYOUT</h1>
-                            <h1 ng-if="showNumbers" ng-cloak>@{{ priorityNumbers.senior_pwd.payout }}</h1>
+                            <h1 ng-if="showNumbers && !editNumbers" ng-cloak>@{{ priorityNumbers.senior_pwd.payout }}</h1>
+                            <input type="text" ng-if="showNumbers && editNumbers" ng-model="priorityNumbers.senior_pwd.payout" ng-cloak>
                         </button>
                     </div>
                 </div>
@@ -129,7 +135,8 @@
                     <div class="col-6 number-button">
                         <button type="button" class="btn btn-block btn-danger" ng-click="printPriorityNumber('customer_service')">
                             <h1 ng-if="!showNumbers">CUSTOMER SERVICE</h1>
-                            <h1 ng-if="showNumbers" ng-cloak>@{{ priorityNumbers.customer_service }}</h1>
+                            <h1 ng-if="showNumbers && !editNumbers" ng-cloak>@{{ priorityNumbers.customer_service }}</h1>
+                            <input type="text" ng-if="showNumbers && editNumbers" ng-model="priorityNumbers.customer_service" ng-cloak>
                         </button>
                     </div>
                     <div class="col-6 number-button">
@@ -140,8 +147,11 @@
                             <button type="button" class="btn btn-outline-warning" ng-click="hideNumbers()" ng-if="showNumbers" ng-cloak>
                                 <h1>HIDE NUMBERS</h1>
                             </button>
-                            <button type="button" class="btn btn-outline-warning" ng-click="resetNumbers()">
+                            <button type="button" class="btn btn-outline-warning" ng-click="resetNumbers()" ng-if="!editNumbers">
                                 <h1>RESET NUMBERS</h1>
+                            </button>
+                            <button type="button" class="btn btn-success" ng-click="saveNumbers()" ng-if="editNumbers" ng-cloak>
+                                <h1>SAVE NUMBERS</h1>
                             </button>
                         </div>
                     </div>
@@ -161,6 +171,9 @@
             }, 300);
 
             $scope.printPriorityNumber = _.debounce(function (category, type) {
+                if($scope.editNumbers || $scope.showNumbers){
+                    return false;
+                }
                 window.open('/priority-number/?category=' + category + '&type=' + type,
                 'newwindow',
                 'width=500,height=600');
@@ -169,7 +182,52 @@
 
             $scope.hideNumbers = function() {
                 $scope.showNumbers = false;
+                $scope.editNumbers = false;
             }
+
+            $scope.resetNumbers = _.debounce(function() {
+                $http({
+                    method: 'GET',
+                    url: '/current-numbers',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).then(function (response) {
+                    $scope.showNumbers = true;
+                    $scope.editNumbers = true;
+                    $scope.priorityNumbers = response.data;
+                    console.log($scope.priorityNumbers );
+                }, function (rejection) {
+                    if (rejection.status != 422) {
+                        request_error(rejection.status);
+                    } else if (rejection.status == 422) {
+                        var errors = rejection.data;
+                        $scope.formerrors = errors;
+                    }
+                    $scope.submit = false;
+                });
+            }, 150);
+
+
+            $scope.saveNumbers = _.debounce(function() {
+                $http({
+                    method: 'POST',
+                    url: '/current-numbers',
+                    data: $.param($scope.priorityNumbers),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).then(function (response) {
+                    $scope.showNumbers = true;
+                    $scope.editNumbers = false;
+                }, function (rejection) {
+                    if (rejection.status != 422) {
+                    } else if (rejection.status == 422) {
+                        alert('Must Enter a Number');
+                    }
+                    $scope.submit = false;
+                });
+            }, 150);
 
             $scope.viewNumbers = _.debounce(function() {
                 $http({

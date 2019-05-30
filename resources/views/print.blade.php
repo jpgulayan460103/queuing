@@ -41,7 +41,7 @@
         </style>
     </head>
     <body>
-        <div style="width: 100mm;">
+        <div style="width: 110mm;">
             <center>
                 <br>
                 <h1 style="text-align: center" id="rigen">RIGEN</h1>

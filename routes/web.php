@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 Route::get('/priority-number', 'PageController@printNumber');
 Route::get('/current-numbers', 'PageController@getCurrentNumbers');
+Route::post('/current-numbers', 'PageController@saveCurrentNumbers');
