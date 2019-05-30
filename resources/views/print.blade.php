@@ -44,8 +44,7 @@
         <div style="width: 110mm;">
             <center>
                 <br>
-                <h1 style="text-align: center" id="rigen">RIGEN</h1>
-                <h4 style="text-align: center" id="marketing">MARKETING</h4><br>
+                <img src="img/rigen-logo.png" style="width: 70mm; margin-bottom: 10px">
                 <h1 style="text-align: center">- MATI -</h1>
                 <hr>
                 <h2 style="text-align: center" id="priority_number">{{ sprintf('%03d',$priority_number->priority_number) }}</h2>
